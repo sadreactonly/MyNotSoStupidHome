@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MyNotSoStupidHome</string>
+    <string name="action_settings">Settings</string>
+	  <string name="action_new_widget">Add new widget</string>
+		<string name="widget_name">Name</string>
+		<string name="widget_action">Action</string>
+		<string name="server_ip">Server IP adress</string>
+		<string name="no_widget">No widgets</string>
+		<string name="invalid_number_of_nicks">Total nicks (%1$d) should be a multiple of major nick interval (%2$d). Scale may be distorted.</string>
+		<string name="invalid_min_max_ratio">Sum of min (%1$f) and max (%2$f) should be divisible by 2. Scale may be distorted.</string>
+		<string name="invalid_min_max">Sum of min (%1$f) and max (%2$f) should be a multiple of value per nick (%3$f). Scale may be distorted.</string>
+		<string name="scale_ok">Scale should be okay.</string>
+</resources>
