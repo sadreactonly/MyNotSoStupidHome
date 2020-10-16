@@ -4411,67 +4411,82 @@ namespace MyNotSoStupidHome
 			public const int hide_bottom_view_on_scroll_behavior = 2131623986;
 			
 			// aapt resource value: 0x7F0E0033
-			public const int invalid_min_max = 2131623987;
+			public const int humidity = 2131623987;
 			
 			// aapt resource value: 0x7F0E0034
-			public const int invalid_min_max_ratio = 2131623988;
+			public const int humidity_unit = 2131623988;
 			
 			// aapt resource value: 0x7F0E0035
-			public const int invalid_number_of_nicks = 2131623989;
+			public const int invalid_min_max = 2131623989;
 			
 			// aapt resource value: 0x7F0E0036
-			public const int living_room_widget_title = 2131623990;
+			public const int invalid_min_max_ratio = 2131623990;
 			
 			// aapt resource value: 0x7F0E0037
-			public const int mtrl_chip_close_icon_content_description = 2131623991;
+			public const int invalid_number_of_nicks = 2131623991;
 			
 			// aapt resource value: 0x7F0E0038
-			public const int no_widget = 2131623992;
+			public const int lightState = 2131623992;
 			
 			// aapt resource value: 0x7F0E0039
-			public const int password_toggle_content_description = 2131623993;
+			public const int living_room_widget_title = 2131623993;
 			
 			// aapt resource value: 0x7F0E003A
-			public const int path_password_eye = 2131623994;
+			public const int mtrl_chip_close_icon_content_description = 2131623994;
 			
 			// aapt resource value: 0x7F0E003B
-			public const int path_password_eye_mask_strike_through = 2131623995;
+			public const int no_widget = 2131623995;
 			
 			// aapt resource value: 0x7F0E003C
-			public const int path_password_eye_mask_visible = 2131623996;
+			public const int password_toggle_content_description = 2131623996;
 			
 			// aapt resource value: 0x7F0E003D
-			public const int path_password_strike_through = 2131623997;
+			public const int path_password_eye = 2131623997;
 			
 			// aapt resource value: 0x7F0E003E
-			public const int scale_ok = 2131623998;
+			public const int path_password_eye_mask_strike_through = 2131623998;
 			
 			// aapt resource value: 0x7F0E003F
-			public const int search_menu_title = 2131623999;
+			public const int path_password_eye_mask_visible = 2131623999;
 			
 			// aapt resource value: 0x7F0E0040
-			public const int server_ip = 2131624000;
+			public const int path_password_strike_through = 2131624000;
 			
 			// aapt resource value: 0x7F0E0041
-			public const int start = 2131624001;
+			public const int scale_ok = 2131624001;
 			
 			// aapt resource value: 0x7F0E0042
-			public const int startFeeder = 2131624002;
+			public const int search_menu_title = 2131624002;
 			
 			// aapt resource value: 0x7F0E0043
-			public const int startPump = 2131624003;
+			public const int server_ip = 2131624003;
 			
 			// aapt resource value: 0x7F0E0044
-			public const int status_bar_notification_info_overflow = 2131624004;
+			public const int start = 2131624004;
 			
 			// aapt resource value: 0x7F0E0045
-			public const int water_pump_widget_title = 2131624005;
+			public const int startFeeder = 2131624005;
 			
 			// aapt resource value: 0x7F0E0046
-			public const int widget_action = 2131624006;
+			public const int startPump = 2131624006;
 			
 			// aapt resource value: 0x7F0E0047
-			public const int widget_name = 2131624007;
+			public const int status_bar_notification_info_overflow = 2131624007;
+			
+			// aapt resource value: 0x7F0E0049
+			public const int temperature = 2131624009;
+			
+			// aapt resource value: 0x7F0E0048
+			public const int temp_unit = 2131624008;
+			
+			// aapt resource value: 0x7F0E004A
+			public const int water_pump_widget_title = 2131624010;
+			
+			// aapt resource value: 0x7F0E004B
+			public const int widget_action = 2131624011;
+			
+			// aapt resource value: 0x7F0E004C
+			public const int widget_name = 2131624012;
 			
 			static String()
 			{

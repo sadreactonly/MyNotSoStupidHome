@@ -45,7 +45,9 @@ namespace MyNotSoStupidHome
             linear = FindViewById<LinearLayout>(Resource.Id.linearLayout1);
        
             lightSwitch = FindViewById<ToggleButton>(Resource.Id.toggleLightSwitch);
+           
             lightState = FindViewById<TextView>(Resource.Id.textLightState);
+           
 
             pumpButton = FindViewById<Button>(Resource.Id.buttonPump);
 			pumpButton.Click += PumpButton_Click;
@@ -64,9 +66,9 @@ namespace MyNotSoStupidHome
 				MaxValue = 100,
 				ValuePerNick = 1,
 				InitValue = 0,
-				UpperText = "Temperature",
-				LowerText = "°C"
-			};
+				UpperText = Resources.GetString(Resource.String.temperature),
+				LowerText = Resources.GetString(Resource.String.temp_unit)
+            };
 			
             humidityGauge = new Gauge(this)
             {
@@ -76,8 +78,8 @@ namespace MyNotSoStupidHome
                 MaxValue = 100,
                 ValuePerNick = 1,
                 InitValue = 0,
-                UpperText = "Humidity",
-                LowerText = "%"
+                UpperText = Resources.GetString(Resource.String.humidity),
+                LowerText = Resources.GetString(Resource.String.humidity_unit)
             };
 
             linear.AddView(tempGauge);
@@ -105,11 +107,11 @@ namespace MyNotSoStupidHome
         {
             Task.Run(async () =>
             {
+
               var result =  await communicationService.GetInitialStates();
               var jObj = (JObject)result;
 
                 RunOnUiThread(() => {
-                   
 
                     var t = float.Parse(jObj["temperature"].ToString());
                     var h = float.Parse(jObj["humidity"].ToString());
@@ -121,12 +123,12 @@ namespace MyNotSoStupidHome
                     if (state == "1")
                     {
                         lightSwitch.Checked = true;
-                        lightState.Text = "Light is on.";
+                        lightState.Text = string.Format(Resources.GetString(Resource.String.lightState), "on.");
                     }
                     else
                     {
                         lightSwitch.Checked = false;
-                        lightState.Text = "Light is off.";
+                        lightState.Text = string.Format(Resources.GetString(Resource.String.lightState), "off.");
                     }
                     lightSwitch.CheckedChange += LightSwitch_CheckedChange;
                 });
@@ -147,21 +149,17 @@ namespace MyNotSoStupidHome
 
 		private async void LightSwitch_CheckedChange(object sender, CompoundButton.CheckedChangeEventArgs e)
 		{
-            bool result;
-            string state = string.Empty;
             if (e.IsChecked)
 			{
 
-                result = await communicationService.SetLight(1);
-                lightState.Text = "Light is on.";
+                await communicationService.SetLight(1);
+                lightState.Text = string.Format(Resources.GetString(Resource.String.lightState), "on.");
             }
             else
 			{
-                result = await communicationService.SetLight(0);
-                lightState.Text = "Light is off.";
+                await communicationService.SetLight(0);
+                lightState.Text = string.Format(Resources.GetString(Resource.String.lightState), "off.");
             }
-
-            //uiManager.CreateToast(this.ApplicationContext, "Light is " + state);
         }
 
 		private async void PumpButton_Click(object sender, EventArgs e)

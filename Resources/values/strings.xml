@@ -17,4 +17,9 @@
 		<string name="start">Start</string>
 		<string name="startPump">Start pump</string>
 		<string name="startFeeder">Feed</string>
+		<string name="temperature">Temperature</string>
+		<string name="temp_unit">\u2103</string>
+		<string name="humidity">Humidity</string>
+		<string name="humidity_unit">&#37;</string>
+		<string name="lightState">Light is {0}</string>
 </resources>
