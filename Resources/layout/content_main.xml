@@ -8,35 +8,39 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main">
     <android.support.design.card.MaterialCardView
-		android:minWidth="25px"
-		android:minHeight="25px"
-		android:layout_margin="25px"
+		android:minWidth="@dimen/minWidth"
+        android:minHeight="@dimen/minHeight"
+	    android:layout_margin="@dimen/widget_margin"
 		android:layout_width="match_parent"
-		android:layout_height="200dp"
+		android:layout_height="@dimen/light_widget_height"
         android:id="@+id/materialCardView1">
-         <include layout="@layout/lightSwitch_layout" />
+        
+            <include layout="@layout/lightSwitch_layout" />
+    
     </android.support.design.card.MaterialCardView>
       
     <android.support.design.card.MaterialCardView
-		android:minWidth="25px"
-		android:minHeight="25px"
-		android:layout_margin="25px"
+		android:minWidth="@dimen/minWidth"
+        android:minHeight="@dimen/minHeight"
+		android:layout_margin="@dimen/widget_margin"
 		android:layout_width="match_parent"
-		android:layout_height="50dp"
+		android:layout_height="@dimen/pump_widget_height"
         android:id="@+id/materialCardView2">
-        <include layout="@layout/pump_layout" />
-           
- 
+        
+            <include layout="@layout/pump_layout" />
+    
     </android.support.design.card.MaterialCardView>
-      <android.support.design.card.MaterialCardView
-		android:minWidth="25px"
-		android:minHeight="25px"
-		android:layout_margin="25px"
+      
+    <android.support.design.card.MaterialCardView
+		android:minWidth="@dimen/minWidth"
+        android:minHeight="@dimen/minHeight"
+		android:layout_margin="@dimen/widget_margin"
 		android:layout_width="match_parent"
-		android:layout_height="250dp"
+		android:layout_height="@dimen/temp_sensor_widget_height"
         android:id="@+id/materialCardView3">
-          <include layout="@layout/temp_sensor_layout" />
-    </android.support.design.card.MaterialCardView>
 
+          <include layout="@layout/temp_sensor_layout" />
+
+    </android.support.design.card.MaterialCardView>
 
 </LinearLayout>

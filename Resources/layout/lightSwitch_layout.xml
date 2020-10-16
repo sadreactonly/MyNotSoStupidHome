@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-        <ToggleButton
-            android:id="@+id/toggleButton1"
+    android:layout_height="match_parent">      
+        <RelativeLayout
+        android:minWidth="@dimen/minWidth"
+        android:minHeight="@dimen/minHeight"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/widget_title_height"
+        android:background="@color/colorPrimary"
+        android:id="@+id/relativeLayout1">
+            <TextView
+            android:text="@string/living_room_widget_title"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/check"   
+            android:id="@+id/textView1" />
+        </RelativeLayout>>
+        <ToggleButton
+            android:id="@+id/toggleLightSwitch"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/relativeLayout1"
+            android:background="@drawable/check"
             android:textOn=""
-            android:textOff=""
+            android:textOff=""           
+            android:layout_centerHorizontal="true"
             android:focusable="false"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/light_toggle_margin"
             android:focusableInTouchMode="false"
-            android:layout_centerVertical="true"/>
             />
-</LinearLayout>
+        <TextView
+            android:text=""
+            android:layout_below="@+id/toggleLightSwitch"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/textLightState" />
+</RelativeLayout>

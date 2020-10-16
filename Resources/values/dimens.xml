@@ -1,3 +1,12 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+	<dimen name="minWidth">25px</dimen>
+	<dimen name="minHeight">25px</dimen>
+	<dimen name="widget_title_height">30dp</dimen>
+	<dimen name="pump_widget_height">100dp</dimen>
+	<dimen name="light_widget_height">200dp</dimen>
+	<dimen name="temp_sensor_widget_height">250dp</dimen>
+	<dimen name="light_toggle_dimen">100dp</dimen>
+	<dimen name="light_toggle_margin">10dp</dimen>
+	<dimen name="widget_margin">30px</dimen>
 </resources>

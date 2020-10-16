@@ -68,28 +68,27 @@ namespace MyNotSoStupidHome
         private float requestedTextSize = 0;
         private float requestedUpperTextSize = 0;
         private float requestedLowerTextSize = 0;
-        private String upperText = "";
-        private String lowerText = "";
+        private string upperText = "";
+        private string lowerText = "";
 
         private float textScaleFactor;
 
         private static int REF_MAX_PORTRAIT_CANVAS_SIZE = 1080; // reference size, scale text accordingly
 
-        public Canvas can;
         public Gauge(Context context): base(context)
         {
             SetLayerType(LayerType.Software, null);
-            initValues();
-            initPaint();
+            InitValues();
+            InitPaint();
         }
         public Gauge(Context context, IAttributeSet attrs) :
 			base(context, attrs)
 		{
             SetLayerType(LayerType.Software, null);
 
-            applyAttrs(context, attrs);
-            initValues();
-            initPaint();
+            ApplyAttrs(context, attrs);
+            InitValues();
+            InitPaint();
         }
 
 		public Gauge(Context context, IAttributeSet attrs, int defStyle) :
@@ -97,14 +96,14 @@ namespace MyNotSoStupidHome
 		{
             SetLayerType(LayerType.Software, null);
 
-            applyAttrs(context, attrs);
-            initValues();
-            initPaint();
+            ApplyAttrs(context, attrs);
+            InitValues();
+            InitPaint();
         }
 
 
 		
-        private void applyAttrs(Context context, IAttributeSet attrs)
+        private void ApplyAttrs(Context context, IAttributeSet attrs)
         {
             TypedArray a = context.ObtainStyledAttributes(attrs, Resource.Styleable.Gauge, 0, 0);
             totalNicks = a.GetInt(Resource.Styleable.Gauge_totalNicks, totalNicks);
@@ -121,18 +120,18 @@ namespace MyNotSoStupidHome
             needleColor = a.GetColor(Resource.Styleable.Gauge_needleColor, Color.Red);
             needleShadow = a.GetBoolean(Resource.Styleable.Gauge_needleShadow, needleShadow);
             requestedTextSize = a.GetFloat(Resource.Styleable.Gauge_textSize, requestedTextSize);
-            upperText = a.GetString(Resource.Styleable.Gauge_upperText) == null ? upperText : fromHtml(a.GetString(Resource.Styleable.Gauge_upperText)).ToString();
-            lowerText = a.GetString(Resource.Styleable.Gauge_lowerText) == null ? lowerText : fromHtml(a.GetString(Resource.Styleable.Gauge_lowerText)).ToString();
+            upperText = a.GetString(Resource.Styleable.Gauge_upperText) == null ? upperText : FromHtml(a.GetString(Resource.Styleable.Gauge_upperText)).ToString();
+            lowerText = a.GetString(Resource.Styleable.Gauge_lowerText) == null ? lowerText : FromHtml(a.GetString(Resource.Styleable.Gauge_lowerText)).ToString();
             requestedUpperTextSize = a.GetFloat(Resource.Styleable.Gauge_upperTextSize, 0);
             requestedLowerTextSize = a.GetFloat(Resource.Styleable.Gauge_lowerTextSize, 0);
             a.Recycle();
 
-            validate();
+            Validate();
         }
 
-        private void initValues()
+        private void InitValues()
         {
-            needleStep = needleStepFactor * valuePerDegree();
+            needleStep = needleStepFactor * ValuePerDegree();
             centerValue = (minValue + maxValue) / 2;
             needleValue = value = initialValue;
 
@@ -141,14 +140,10 @@ namespace MyNotSoStupidHome
 
         }
 
-        private void initPaint()
+        private void InitPaint()
         {
 
             SaveEnabled = true;
-
-            // Rim and shadow are based on the Vintage Thermometer:
-            // http://mindtherobot.com/blog/272/android-custom-ui-making-a-vintage-thermometer/
-
             rimPaint = new Paint(PaintFlags.AntiAlias);
 
             rimCirclePaint = new Paint();
@@ -204,29 +199,28 @@ namespace MyNotSoStupidHome
             needleScrewPaint.AntiAlias = true;
         }
 
-    protected override void OnDraw(Canvas canvas)
+        protected override void OnDraw(Canvas canvas)
         {
-            can = canvas;
             base.OnDraw(canvas);
 
-            drawRim(canvas); //radi
-            drawFace(canvas); //radi
-            drawScale(canvas);
-            drawLabels(canvas);
-            drawTexts(canvas);
-            canvas.Rotate(scaleToCanvasDegrees(valueToDegrees(needleValue)), canvasCenterX, canvasCenterY);
+            DrawRim(canvas); 
+            DrawFace(canvas); 
+            DrawScale(canvas);
+            DrawLabels(canvas);
+            DrawTexts(canvas);
+            canvas.Rotate(ScaleToCanvasDegrees(ValueToDegrees(needleValue)), canvasCenterX, canvasCenterY);
             canvas.DrawPath(needlePath, needlePaint);
             canvas.DrawCircle(canvasCenterX, canvasCenterY, canvasWidth / 61f, needleScrewPaint);
 
           
 
-            if (needsToMove())
+            if (NeedsToMove())
             {
-                moveNeedle();
+                MoveNeedle();
             }
         }
 
-        private void moveNeedle()
+        private void MoveNeedle()
         {
             long currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             long deltaTime = currentTime - lastMoveTime;
@@ -241,11 +235,11 @@ namespace MyNotSoStupidHome
                 {
                     if (value > needleValue)
                     {
-                        needleValue += 2 * valuePerDegree();
+                        needleValue += 2 * ValuePerDegree();
                     }
                     else
                     {
-                        needleValue -= 2 * valuePerDegree();
+                        needleValue -= 2 * ValuePerDegree();
                     }
                 }
                 lastMoveTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -253,20 +247,20 @@ namespace MyNotSoStupidHome
             }
         }
 
-        private void drawRim(Canvas canvas)
+        private void DrawRim(Canvas canvas)
         {
             canvas.DrawOval(rimRect, rimPaint);
             canvas.DrawOval(rimRect, rimCirclePaint);
         }
 
-        private void drawFace(Canvas canvas)
+        private void DrawFace(Canvas canvas)
         {
             canvas.DrawOval(faceRect, facePaint);
             canvas.DrawOval(faceRect, rimCirclePaint);
             canvas.DrawOval(faceRect, rimShadowPaint);
         }
 
-        private void drawScale(Canvas canvas)
+        private void DrawScale(Canvas canvas)
         {
             
             canvas.Save();
@@ -277,7 +271,7 @@ namespace MyNotSoStupidHome
                 float y3 = y1 + (0.060f * canvasHeight);
                 float y4 = y1 + (0.030f * canvasHeight);
 
-                float value = nickToValue(i);
+                float value = NickToValue(i);
 
                 if (value >= minValue && value <= maxValue)
                 {
@@ -301,11 +295,11 @@ namespace MyNotSoStupidHome
             canvas.Restore();
         }
 
-        private void drawLabels(Canvas canvas)
+        private void DrawLabels(Canvas canvas)
         {
             for (int i = 0; i < totalNicks; i += majorNickInterval)
             {
-                float value = nickToValue(i);
+                float value = NickToValue(i);
                 if (value >= minValue && value <= maxValue)
                 {
                     float scaleAngle = i * degreesPerNick;
@@ -313,7 +307,7 @@ namespace MyNotSoStupidHome
                     //Log.d(TAG, "i = " + i + ", angle = " + scaleAngle + ", value = " + value);
                     float deltaX = labelRadius * (float)Math.Sin(scaleAngleRads);
                     float deltaY = labelRadius * (float)Math.Cos(scaleAngleRads);
-                    String valueLabel;
+                    string valueLabel;
                     if (intScale)
                     {
                         valueLabel = ((int)value).ToString();
@@ -322,7 +316,7 @@ namespace MyNotSoStupidHome
                     {
                         valueLabel = value.ToString();
                     }
-                    drawTextCentered(valueLabel, canvasCenterX + deltaX, canvasCenterY - deltaY, labelPaint, canvas);
+                    DrawTextCentered(valueLabel, canvasCenterX + deltaX, canvasCenterY - deltaY, labelPaint, canvas);
                 }
             }
         }
@@ -330,13 +324,13 @@ namespace MyNotSoStupidHome
 		{
             return (float)(Math.PI / 180) * scaleAngle;
         }
-        private void drawTexts(Canvas canvas)
+        private void DrawTexts(Canvas canvas)
         {
-            drawTextCentered(upperText, canvasCenterX, canvasCenterY - (canvasHeight / 6.5f), upperTextPaint, canvas);
-            drawTextCentered(lowerText, canvasCenterX, canvasCenterY + (canvasHeight / 6.5f), lowerTextPaint, canvas);
+            DrawTextCentered(upperText, canvasCenterX, canvasCenterY - (canvasHeight / 6.5f), upperTextPaint, canvas);
+            DrawTextCentered(lowerText, canvasCenterX, canvasCenterY + (canvasHeight / 6.5f), lowerTextPaint, canvas);
         }
 
-    protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
+        protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
         {
             canvasWidth = (float)w;
             canvasHeight = (float)h;
@@ -351,7 +345,7 @@ namespace MyNotSoStupidHome
             if (needleShadow)
                 needlePaint.SetShadowLayer(canvasWidth / 123f, canvasWidth / 10000f, canvasWidth / 10000f, Color.Gray);
 
-            setNeedle();
+            SetNeedle();
 
             rimRect = new RectF(canvasWidth * .05f, canvasHeight * .05f, canvasWidth * 0.95f, canvasHeight * 0.95f);
             rimPaint.SetShader(new LinearGradient(canvasWidth * 0.40f, canvasHeight * 0.0f, canvasWidth * 0.60f, canvasHeight * 1.0f,
@@ -418,7 +412,7 @@ namespace MyNotSoStupidHome
             base.OnSizeChanged(w, h, oldw, oldh);
         }
 
-        private void setNeedle()
+        private void SetNeedle()
         {
             needlePath.Reset();
             needlePath.MoveTo(canvasCenterX - needleTailLength, canvasCenterY);
@@ -479,34 +473,34 @@ namespace MyNotSoStupidHome
             }
         }
 
-        private float nickToValue(int nick)
+        private float NickToValue(int nick)
         {
             float rawValue = ((nick < totalNicks / 2) ? nick : (nick - totalNicks)) * valuePerNick;
             return rawValue + centerValue;
         }
 
-        private float valueToDegrees(float value)
+        private float ValueToDegrees(float value)
         {
             // these are scale degrees, 0 is on top
             return ((value - centerValue) / valuePerNick) * degreesPerNick;
         }
 
-        private float valuePerDegree()
+        private float ValuePerDegree()
         {
             return valuePerNick / degreesPerNick;
         }
 
-        private float scaleToCanvasDegrees(float degrees)
+        private float ScaleToCanvasDegrees(float degrees)
         {
             return degrees - 90;
         }
 
-        private bool needsToMove()
+        private bool NeedsToMove()
         {
             return Math.Abs(needleValue - value) > 0;
         }
 
-        private void drawTextCentered(String text, float x, float y, Paint paint, Canvas canvas)
+        private void DrawTextCentered(string text, float x, float y, Paint paint, Canvas canvas)
         {
 
             //float xPos = x - (paint.measureText(text)/2f);
@@ -514,227 +508,182 @@ namespace MyNotSoStupidHome
             canvas.DrawText(text, x, yPos, paint);
         }
 
-        /**
-         * Set gauge to value.
-         *
-         * @param value Value
-         */
-        public void setValue(float value)
-        {
-            needleValue = this.value = value;
-            PostInvalidate();
-        }
+      
 
-        /**
-         * Animate gauge to value.
-         *
-         * @param value Value
-         */
-        public void moveToValue(float value)
+   
+        public float Value
+		{
+            get => this.value;
+            set
+            {
+                needleValue = this.value = value;
+                PostInvalidate();
+            }
+		}
+        public void MoveToValue(float value)
         {
             this.value = value;
             PostInvalidate();
         }
 
-        /**
-         * Set string to display on upper gauge face.
-         *
-         * @param text Text
-         */
-        public void setUpperText(String text)
+        public string UpperText
         {
-            upperText = text;
-            Invalidate();
+            get => this.upperText;
+            set
+            {
+                upperText = value;
+                Invalidate();
+            }
         }
-
-        /**
-         * Set string to display on lower gauge face.
-         *
-         * @param text Text
-         */
-        public void setLowerText(String text)
+        public string LowerText
         {
-            lowerText = text;
-            Invalidate();
+            get => this.lowerText;
+            set
+            {
+                lowerText = value;
+                Invalidate();
+            }
         }
-
-        /**
-         * Request a text size.
-         *
-         * @param size Size (pixels)
-         * @see Paint#setTextSize(float);
-         */
         
         [Obsolete]
-        public void setRequestedTextSize(float size)
+        public void SetRequestedTextSize(float size)
         {
-            setTextSize(size);
+            SetTextSize(size);
         }
 
-        /**
-         * Set a text size for the upper and lower text.
-         *
-         * Size is in pixels at a screen width (max. canvas width/height) of 1080 and is scaled
-         * accordingly at different resolutions. E.g. a value of 48 is unchanged at 1080 x 1920
-         * and scaled down to 27 at 600 x 1024.
-         *
-         * @param size Size (relative pixels)
-         * @see Paint#setTextSize(float);
-         */
-        public void setTextSize(float size)
+     
+        public void SetTextSize(float size)
         {
             requestedTextSize = size;
         }
 
-        /**
-         * Set or override the text size for the upper text.
-         *
-         * Size is in pixels at a screen width (max. canvas width/height) of 1080 and is scaled
-         * accordingly at different resolutions. E.g. a value of 48 is unchanged at 1080 x 1920
-         * and scaled down to 27 at 600 x 1024.
-         *
-         * @param size (relative pixels)
-         * @see Paint#setTextSize(float);
-         */
-        public void setUpperTextSize(float size)
+        public float TextSize
         {
-            requestedUpperTextSize = size;
+            get => this.requestedTextSize;
+            set
+            {
+                requestedTextSize = value;
+            }
         }
 
-        /**
-         * Set or override the text size for the lower text
-         *
-         * Size is in pixels at a screen width (max. canvas width/height) of 1080 and is scaled
-         * accordingly at different resolutions. E.g. a value of 48 is unchanged at 1080 x 1920
-         * and scaled down to 27 at 600 x 1024.
-         *
-         * @param size (relative pixels)
-         * @see Paint#setTextSize(float);
-         */
-        public void setLowerTextSize(float size)
+        public float UpperTextSize
         {
-            requestedLowerTextSize = size;
+            get => this.requestedUpperTextSize;
+            set
+            {
+                requestedUpperTextSize = value;
+            }
+        }
+        public float LowerTextSize
+        {
+            get => this.requestedLowerTextSize;
+            set
+            {
+                requestedLowerTextSize = value;
+            }
         }
 
-        /**
-         * Set the delta time between movement steps during needle animation (default: 5 ms).
-         *
-         * @param interval Time (ms)
-         */
-        public void setDeltaTimeInterval(int interval)
+        public void SetDeltaTimeInterval(int interval)
         {
             deltaTimeInterval = interval;
         }
 
-        /**
-         * Set the factor that determines the step size during needle animation (default: 3f).
-         * The actual step size is calulated as follows: step_size = step_factor * scale_value_per_degree.
-         *
-         * @param factor Step factor
-         */
-        public void setNeedleStepFactor(float factor)
+   
+        public void SetNeedleStepFactor(float factor)
         {
             needleStepFactor = factor;
         }
 
-
-        /**
-         * Set the minimum scale value.
-         *
-         * @param value minimum value
-         */
-        public void setMinValue(float value)
+        public float MinValue
+		{
+            get => minValue;
+			set
+			{
+                minValue = value;
+                InitValues();
+                Validate();
+                Invalidate();
+            }
+		}
+        public float MaxValue
         {
-            minValue = value;
-            initValues();
-            validate();
-            Invalidate();
+            get => maxValue;
+            set
+            {
+                maxValue = value;
+                InitValues();
+                Validate();
+                Invalidate();
+            }
         }
 
-        /**
-         * Set the maximum scale value.
-         *
-         * @param value maximum value
-         */
-        public void setMaxValue(float value)
+        public float InitValue
         {
-            maxValue = value;
-            initValues();
-            validate();
-            Invalidate();
+            get => initialValue;
+            set
+            {
+                initialValue = value;
+                InitValues();
+                Validate();
+                Invalidate();
+            }
         }
 
-        public void setInitValue(float value)
+        public int TotalNicks
         {
-            initialValue = value;
-            initValues();
-            validate();
-            Invalidate();
-        }
-        /**
-         * Set the total amount of nicks on a full 360 degree scale. Should be a multiple of majorNickInterval.
-         *
-         * @param nicks number of nicks
-         */
-        public void setTotalNicks(int nicks)
-        {
-            totalNicks = nicks;
-            degreesPerNick = 360.0f / totalNicks;
-            initValues();
-            validate();
-            Invalidate();
+            get => totalNicks;
+            set
+            {
+                totalNicks = value;
+                degreesPerNick = 360.0f / totalNicks;
+                InitValues();
+                Validate();
+                Invalidate();
+            }
         }
 
-        /**
-         * Set the value (interval) per nick.
-         *
-         * @param value value per nick
-         */
-        public void setValuePerNick(float value)
+        public float ValuePerNick
         {
-            valuePerNick = value;
-            initValues();
-            validate();
-            Invalidate();
+            get => valuePerNick;
+            set
+            {
+                valuePerNick = value;
+                InitValues();
+                Validate();
+                Invalidate();
+            }
         }
 
-        /**
-         * Set the interval (number of nicks) between enlarged nicks.
-         *
-         * @param interval major nick interval
-         */
-        public void setMajorNickInterval(int interval)
+
+
+        public void SetMajorNickInterval(int interval)
         {
             majorNickInterval = interval;
-            validate();
+            Validate();
             Invalidate();
         }
 
-        private void validate()
+        private void Validate()
         {
             bool valid = true;
             if (totalNicks % majorNickInterval != 0)
             {
                 valid = false;
-               // Log.w(TAG, getResources().getString(R.string.invalid_number_of_nicks, totalNicks, majorNickInterval));
             }
             float sum = minValue + maxValue;
             int intSum = (int)Math.Round(sum);
             if ((maxValue >= 1 && (sum != intSum || (intSum & 1) != 0)) || minValue >= maxValue)
             {
                 valid = false;
-               // Log.w(TAG, getResources().getString(R.string.invalid_min_max_ratio, minValue, maxValue));
             }
             if (Math.Round(sum % valuePerNick) != 0)
             {
                 valid = false;
-               // Log.w(TAG, getResources().getString(R.string.invalid_min_max, minValue, maxValue, valuePerNick));
             }
-            //if (valid)// Log.i(TAG, getResources().getString(R.string.scale_ok));
         }
 
     
-        private static ISpanned fromHtml(String html)
+        private static ISpanned FromHtml(string html)
         {
             ISpanned result;
             if (Build.VERSION.SdkInt >= BuildVersionCodes.N)

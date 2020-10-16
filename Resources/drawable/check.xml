@@ -6,5 +6,4 @@
 	<!-- When not selected, use white-->
 	<item android:drawable="@drawable/light_off"
 			android:state_checked="false"/>
-
 </selector>

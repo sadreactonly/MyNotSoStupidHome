@@ -39,6 +39,21 @@ namespace MyNotSoStupidHome.Communication
 			}
 			
 		}
+
+		public async Task<bool> StartFeeder()
+		{
+			using (var client = new HttpClient())
+			{
+				var result = await client.GetAsync("http://192.168.0.154/startFeeding");
+				if (result.IsSuccessStatusCode)
+				{
+					return true;
+				}
+				return false;
+			}
+
+		}
+
 		public async Task<bool> SetLight(int state)
 		{
 

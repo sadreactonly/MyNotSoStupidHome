@@ -22,9 +22,9 @@ namespace MyNotSoStupidHome
         private ToggleButton lightSwitch;
         private Button pumpButton;
         private Button dhtButton;
-        private TextView temperatureText;
-        private TextView humidityText;
-       
+        private Button feederButton;
+        private TextView lightState;
+
         private CommunicationService communicationService;
         private UIManager uiManager;
 
@@ -43,52 +43,65 @@ namespace MyNotSoStupidHome
             SetSupportActionBar(toolbar);
 
             linear = FindViewById<LinearLayout>(Resource.Id.linearLayout1);
-          
+       
+            lightSwitch = FindViewById<ToggleButton>(Resource.Id.toggleLightSwitch);
+            lightState = FindViewById<TextView>(Resource.Id.textLightState);
 
-            FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
-            fab.Click += FabOnClick;
-
-            lightSwitch = FindViewById<ToggleButton>(Resource.Id.toggleButton1);
-		
-
-            pumpButton = FindViewById<Button>(Resource.Id.button1);
+            pumpButton = FindViewById<Button>(Resource.Id.buttonPump);
 			pumpButton.Click += PumpButton_Click;
 
-            dhtButton = FindViewById<Button>(Resource.Id.button2);
+            dhtButton = FindViewById<Button>(Resource.Id.buttonGetDht);
 			dhtButton.Click += DhtButton_Click;
 
-       
-            tempGauge = new Gauge(this);
-            tempGauge.LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent, 1f);
-            tempGauge.setTotalNicks(120);
-            tempGauge.setMinValue(0);
-            tempGauge.setMaxValue(100);
-            tempGauge.setValuePerNick(1);
-            tempGauge.setInitValue(0);
-            tempGauge.setUpperText("Temperature");
-            tempGauge.setLowerText("°C");
+            feederButton = FindViewById<Button>(Resource.Id.buttonFeed);
+			feederButton.Click += FeederButton_Click;
 
-            humidityGauge = new Gauge(this);
-            humidityGauge.LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent, 1f);
-            humidityGauge.setTotalNicks(120);
-            humidityGauge.setMinValue(0);
-            humidityGauge.setMaxValue(100);
-            humidityGauge.setValuePerNick(1);
-            humidityGauge.setInitValue(0);
-            humidityGauge.setUpperText("Humidity");
-            humidityGauge.setLowerText("%");
+            tempGauge = new Gauge(this)
+			{
+				LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent, 1f),
+				TotalNicks = 120,
+				MinValue = 0,
+				MaxValue = 100,
+				ValuePerNick = 1,
+				InitValue = 0,
+				UpperText = "Temperature",
+				LowerText = "°C"
+			};
+			
+            humidityGauge = new Gauge(this)
+            {
+                LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent, 1f),
+                TotalNicks = 120,
+                MinValue = 0,
+                MaxValue = 100,
+                ValuePerNick = 1,
+                InitValue = 0,
+                UpperText = "Humidity",
+                LowerText = "%"
+            };
 
             linear.AddView(tempGauge);
             linear.AddView(humidityGauge);
         
-
             communicationService = new CommunicationService();
+            uiManager = new UIManager();
+
             Task.Run(() => SetupData());
 
-            uiManager = new UIManager();
+           
         }
 
-        private void SetupData()
+		private async void FeederButton_Click(object sender, EventArgs e)
+		{
+            var result = await communicationService.StartFeeder();
+
+            if (result)
+                uiManager.CreateToast(this.ApplicationContext, "Feeder is done.");
+            else
+                uiManager.CreateToast(this.ApplicationContext, "Function is not implemented on server side.");
+        }
+
+		private void SetupData()
         {
             Task.Run(async () =>
             {
@@ -101,17 +114,19 @@ namespace MyNotSoStupidHome
                     var t = float.Parse(jObj["temperature"].ToString());
                     var h = float.Parse(jObj["humidity"].ToString());
 
-                    tempGauge.moveToValue(t);
-                    humidityGauge.moveToValue(h);
+                    tempGauge.MoveToValue(t);
+                    humidityGauge.MoveToValue(h);
                     
                     string state = jObj["lightState"].ToString();
                     if (state == "1")
                     {
                         lightSwitch.Checked = true;
+                        lightState.Text = "Light is on.";
                     }
                     else
                     {
                         lightSwitch.Checked = false;
+                        lightState.Text = "Light is off.";
                     }
                     lightSwitch.CheckedChange += LightSwitch_CheckedChange;
                 });
@@ -124,8 +139,8 @@ namespace MyNotSoStupidHome
             var result = await communicationService.GetTemperatureAndHumidity();
             string message = "Done";
             RunOnUiThread(() => {
-                tempGauge.moveToValue(result.Temperature);
-                humidityGauge.moveToValue(result.Humidity);
+                tempGauge.MoveToValue(result.Temperature);
+                humidityGauge.MoveToValue(result.Humidity);
             });
             uiManager.CreateToast(this.ApplicationContext, message);
 		}
@@ -138,15 +153,15 @@ namespace MyNotSoStupidHome
 			{
 
                 result = await communicationService.SetLight(1);
-                state = "on.";
+                lightState.Text = "Light is on.";
             }
             else
 			{
                 result = await communicationService.SetLight(0);
-                state = "off.";
+                lightState.Text = "Light is off.";
             }
 
-            uiManager.CreateToast(this.ApplicationContext, "Light is " + state);
+            //uiManager.CreateToast(this.ApplicationContext, "Light is " + state);
         }
 
 		private async void PumpButton_Click(object sender, EventArgs e)
@@ -168,17 +183,9 @@ namespace MyNotSoStupidHome
             int id = item.ItemId;
             if (id == Resource.Id.action_settings)
             {
-                StartActivity(typeof(CircularProgressbarActivity));
             }
 
             return base.OnOptionsItemSelected(item);
-        }
-
-        private void FabOnClick(object sender, EventArgs eventArgs)
-        {
-            View view = (View) sender;
-            Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
-                .SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

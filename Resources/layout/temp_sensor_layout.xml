@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-            <LinearLayout
-            android:orientation="vertical"
-            android:minWidth="25px"
-            android:minHeight="25px"
+    <RelativeLayout
+        android:minWidth="@dimen/minWidth"
+        android:minHeight="@dimen/minHeight"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/widget_title_height"
+        android:background="@color/colorPrimary"
+        android:id="@+id/relativeLayout1">
+            <TextView
+            android:text="@string/dht11_title"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/linearLayout2">
-              <LinearLayout
+            android:id="@+id/textView1" />
+        </RelativeLayout>>
+             
+        <LinearLayout
                 android:orientation="horizontal"
-                android:minWidth="25px"
-                android:minHeight="25px"
+                android:layout_below="@+id/relativeLayout1"
+                android:minWidth="@dimen/minWidth"
+                android:minHeight="@dimen/minHeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/linearLayout1" >
-              </LinearLayout>
-           <Button
-            android:text="Get"
+        </LinearLayout>
+           
+        <Button
+            android:text="@string/get"
+            android:layout_below="@+id/linearLayout1"
+            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button2" />
-        </LinearLayout>
+            android:id="@+id/buttonGetDht" />
 
-</LinearLayout>
+
+</RelativeLayout>

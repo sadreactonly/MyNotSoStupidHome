@@ -61,9 +61,8 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CircularProgressbarActivity.cs" />
     <Compile Include="Communication\CommunicationService.cs" />
-    <Compile Include="Gauge.cs" />
+    <Compile Include="Views\Gauge.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Models\DHT11Sensor.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -122,17 +121,7 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\widgets\new_widget.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\circular_progressbar_drawable.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\circular_progressbar.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
