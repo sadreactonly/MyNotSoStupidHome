@@ -8,6 +8,7 @@ using Android.Views;
 using Android.Widget;
 using MyNotSoStupidHome.Communication;
 using Newtonsoft.Json.Linq;
+using Com.Airbnb.Lottie;
 
 namespace MyNotSoStupidHome
 {
@@ -19,7 +20,7 @@ namespace MyNotSoStupidHome
         private Button dhtButton;
         private Button feederButton;
         private TextView lightState;
-
+        private LottieAnimationView animationView;
         private CommunicationService communicationService;
         private UIManager uiManager;
 
@@ -27,6 +28,7 @@ namespace MyNotSoStupidHome
         private Gauge tempGauge;
         private Gauge humidityGauge;
 
+        private readonly string[] animations = new string[5] { "eating_cat.json", "sleeping_cat.json", "surprised_cat.json", "hungry_cat.json", "happy_cat.json" };
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -36,6 +38,7 @@ namespace MyNotSoStupidHome
 
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
+            animationView = FindViewById<LottieAnimationView>(Resource.Id.animation_view);
 
             linear = FindViewById<LinearLayout>(Resource.Id.linearLayout1);
        
@@ -87,8 +90,17 @@ namespace MyNotSoStupidHome
 
            
         }
+        private void PlayRandomAnimation()
+        {
+            Random rand = new Random();
+            RunOnUiThread(() =>
+            {
+                animationView.SetAnimation(animations[rand.Next(0, 4)]);
+                animationView.PlayAnimation();
+            });
+        }
 
-		private async void FeederButton_Click(object sender, EventArgs e)
+        private async void FeederButton_Click(object sender, EventArgs e)
 		{
             var result = await communicationService.StartFeeder();
 
@@ -96,6 +108,8 @@ namespace MyNotSoStupidHome
                 uiManager.CreateToast(this.ApplicationContext, "Feeder is done.");
             else
                 uiManager.CreateToast(this.ApplicationContext, "Function is not implemented on server side.");
+
+            PlayRandomAnimation();
         }
 
 		private void SetupData()
@@ -108,6 +122,7 @@ namespace MyNotSoStupidHome
 
                 RunOnUiThread(() => {
 
+                    PlayRandomAnimation();
                     var t = float.Parse(jObj["temperature"].ToString());
                     var h = float.Parse(jObj["humidity"].ToString());
 
@@ -163,6 +178,8 @@ namespace MyNotSoStupidHome
             
             if(result)
                 uiManager.CreateToast(this.ApplicationContext, "Pump is done.");
+
+            PlayRandomAnimation();
         }
 
 		public override bool OnCreateOptionsMenu(IMenu menu)

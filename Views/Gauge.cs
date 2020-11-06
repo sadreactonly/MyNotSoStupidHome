@@ -55,13 +55,11 @@ namespace MyNotSoStupidHome
         private int deltaTimeInterval = 5;
         private float needleStepFactor = 3f;
 
-        private  const string TAG = "";
         private Paint labelPaint;
         private long lastMoveTime;
         private bool needleShadow = true;
         private int faceColor;
-        private int scaleColor;
-        private int needleColor;
+
         private Paint upperTextPaint;
         private Paint lowerTextPaint;
 
@@ -73,7 +71,7 @@ namespace MyNotSoStupidHome
 
         private float textScaleFactor;
 
-        private static int REF_MAX_PORTRAIT_CANVAS_SIZE = 1080; // reference size, scale text accordingly
+        private static readonly int REF_MAX_PORTRAIT_CANVAS_SIZE = 1080; // reference size, scale text accordingly
 
         public Gauge(Context context): base(context)
         {
@@ -116,8 +114,6 @@ namespace MyNotSoStupidHome
             initialValue = a.GetFloat(Resource.Styleable.Gauge_initialValue, initialValue);
             requestedLabelTextSize = a.GetFloat(Resource.Styleable.Gauge_labelTextSize, requestedLabelTextSize);
             faceColor = a.GetColor(Resource.Styleable.Gauge_faceColor, Color.Argb(0xff, 0xff, 0xff, 0xff));
-            scaleColor = a.GetColor(Resource.Styleable.Gauge_scaleColor, Color.Blue);
-            needleColor = a.GetColor(Resource.Styleable.Gauge_needleColor, Color.Red);
             needleShadow = a.GetBoolean(Resource.Styleable.Gauge_needleShadow, needleShadow);
             requestedTextSize = a.GetFloat(Resource.Styleable.Gauge_textSize, requestedTextSize);
             upperText = a.GetString(Resource.Styleable.Gauge_upperText) == null ? upperText : FromHtml(a.GetString(Resource.Styleable.Gauge_upperText)).ToString();
@@ -126,7 +122,6 @@ namespace MyNotSoStupidHome
             requestedLowerTextSize = a.GetFloat(Resource.Styleable.Gauge_lowerTextSize, 0);
             a.Recycle();
 
-            Validate();
         }
 
         private void InitValues()
@@ -146,14 +141,18 @@ namespace MyNotSoStupidHome
             SaveEnabled = true;
             rimPaint = new Paint(PaintFlags.AntiAlias);
 
-            rimCirclePaint = new Paint();
-            rimCirclePaint.AntiAlias = true;
+            rimCirclePaint = new Paint
+            {
+                AntiAlias = true
+            };
             rimCirclePaint.SetStyle(Paint.Style.Stroke);
             rimCirclePaint.Color = Color.Argb(0x4f, 0x33, 0x36, 0x33);
             rimCirclePaint.StrokeWidth = 0.005f;
 
-            facePaint = new Paint();
-            facePaint.AntiAlias = true;
+            facePaint = new Paint
+            {
+                AntiAlias = true
+            };
             facePaint.SetStyle(Paint.Style.Fill);
             facePaint.Color = new Color(faceColor);
 
@@ -164,13 +163,14 @@ namespace MyNotSoStupidHome
             scalePaint.SetStyle(Paint.Style.Stroke);
 
             scalePaint.AntiAlias=(true);
-            //scalePaint.Color = new Color(scaleColor);
             scalePaint.SetARGB(255, 255, 255, 255);
 
 
 
-            labelPaint = new Paint();
-            labelPaint.AntiAlias = true;
+            labelPaint = new Paint
+            {
+                AntiAlias = true
+            };
             labelPaint.SetARGB(255, 255, 255, 255);
             labelPaint.SetTypeface(Typeface.SansSerif);
             labelPaint.TextAlign = (Paint.Align.Center);
@@ -187,16 +187,20 @@ namespace MyNotSoStupidHome
             lowerTextPaint.SetARGB(255, 255, 255, 255);
 
 
-            needlePaint = new Paint();
-            needlePaint.Color = Color.Red;
+            needlePaint = new Paint
+            {
+                Color = Color.Red
+            };
             needlePaint.SetStyle(Paint.Style.FillAndStroke);
             needlePaint.AntiAlias = true;
 
             needlePath = new Path();
 
-            needleScrewPaint = new Paint();
-            needleScrewPaint.Color= Color.Black;
-            needleScrewPaint.AntiAlias = true;
+            needleScrewPaint = new Paint
+            {
+                Color = Color.Black,
+                AntiAlias = true
+            };
         }
 
         protected override void OnDraw(Canvas canvas)
@@ -462,12 +466,13 @@ namespace MyNotSoStupidHome
       
     protected override void OnRestoreInstanceState(IParcelable state)
         {
-            if (state is Bundle) {
-                Bundle bundle = (Bundle)state;
+            if (state is Bundle bundle)
+            {
                 value = bundle.GetFloat("value");
                 needleValue = bundle.GetFloat("needleValue");
                 base.OnRestoreInstanceState((IParcelable)bundle.GetParcelable("superState"));
-            } else
+            }
+            else
             {
                 base.OnRestoreInstanceState(state);
             }
@@ -601,7 +606,7 @@ namespace MyNotSoStupidHome
 			{
                 minValue = value;
                 InitValues();
-                Validate();
+
                 Invalidate();
             }
 		}
@@ -612,7 +617,7 @@ namespace MyNotSoStupidHome
             {
                 maxValue = value;
                 InitValues();
-                Validate();
+
                 Invalidate();
             }
         }
@@ -624,7 +629,7 @@ namespace MyNotSoStupidHome
             {
                 initialValue = value;
                 InitValues();
-                Validate();
+
                 Invalidate();
             }
         }
@@ -637,7 +642,7 @@ namespace MyNotSoStupidHome
                 totalNicks = value;
                 degreesPerNick = 360.0f / totalNicks;
                 InitValues();
-                Validate();
+
                 Invalidate();
             }
         }
@@ -649,7 +654,7 @@ namespace MyNotSoStupidHome
             {
                 valuePerNick = value;
                 InitValues();
-                Validate();
+
                 Invalidate();
             }
         }
@@ -659,30 +664,9 @@ namespace MyNotSoStupidHome
         public void SetMajorNickInterval(int interval)
         {
             majorNickInterval = interval;
-            Validate();
             Invalidate();
         }
 
-        private void Validate()
-        {
-            bool valid = true;
-            if (totalNicks % majorNickInterval != 0)
-            {
-                valid = false;
-            }
-            float sum = minValue + maxValue;
-            int intSum = (int)Math.Round(sum);
-            if ((maxValue >= 1 && (sum != intSum || (intSum & 1) != 0)) || minValue >= maxValue)
-            {
-                valid = false;
-            }
-            if (Math.Round(sum % valuePerNick) != 0)
-            {
-                valid = false;
-            }
-        }
-
-    
         private static ISpanned FromHtml(string html)
         {
             ISpanned result;
@@ -692,7 +676,9 @@ namespace MyNotSoStupidHome
             }
             else
             {
+#pragma warning disable CS0618 // Type or member is obsolete
                 result = Html.FromHtml(html);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
             return result;
         }

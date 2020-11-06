@@ -70,6 +70,11 @@
     <Compile Include="UIManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="Assets\eating_cat.json" />
+    <AndroidAsset Include="Assets\happy_cat.json" />
+    <AndroidAsset Include="Assets\hungry_cat.json" />
+    <AndroidAsset Include="Assets\sleeping_cat.json" />
+    <AndroidAsset Include="Assets\surprised_cat.json" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Assets\AboutAssets.txt" />
@@ -109,6 +114,9 @@
     <Folder Include="Configuration\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Com.Airbnb.Android.Lottie">
+      <Version>3.0.6</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
     </PackageReference>

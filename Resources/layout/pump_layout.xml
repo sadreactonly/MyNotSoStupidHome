@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -19,22 +20,29 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView1" />
         </RelativeLayout>
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_below="@+id/relativeLayout1"
+	    android:id="@+id/animation_view"
+        android:layout_centerHorizontal="true"
+	    android:layout_width="150dp"
+	    android:layout_height="150dp"
+	    app:lottie_fileName="happy_cat.json"
+	    app:lottie_loop="true"
+	    app:lottie_autoPlay="true" />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_below="@+id/relativeLayout1"
+        android:layout_below="@+id/animation_view"
         android:orientation="horizontal">
         <Button
             android:text="@string/startFeeder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:id="@+id/buttonFeed" />
         <Button  
             android:text="@string/startPump"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonPump" />
